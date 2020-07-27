@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'App.dart';
+import 'services/SharedPreferencesInstance.dart';
 
 class ThemeSelectorDrawer extends StatefulWidget {
   @override
@@ -9,32 +9,38 @@ class ThemeSelectorDrawer extends StatefulWidget {
 
 class _ThemeSelectorDrawerState extends State<ThemeSelectorDrawer> {
   bool isDarkTheme;
-  SharedPreferences prefs;
 
-  void initState() async {
+  void initState() {
     super.initState();
-    prefs = await SharedPreferences.getInstance();
     isDarkTheme = getIsDarkTheme();
   }
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
-        child: Switch(
-      value: isDarkTheme,
-      onChanged: setIsDarkTheme,
-    ));
+        child: ListView(children: [
+      DrawerHeader(child: Text('Settings')),
+      SwitchListTile(
+        title: Text('Dark Theme'),
+        value: isDarkTheme,
+        onChanged: setIsDarkTheme,
+      )
+    ]));
   }
 
   bool getIsDarkTheme() {
-    if (prefs.containsKey(App.THEME_KEY)) {
-      return prefs.getBool(App.THEME_KEY);
+    if (appSPInstance.containsKey(App.THEME_KEY)) {
+      return appSPInstance.getBool(App.THEME_KEY);
     } else {
       return false;
     }
   }
 
-  void setIsDarkTheme(bool isDarkTheme) async {
-    prefs.setBool(App.THEME_KEY, isDarkTheme);
+  void setIsDarkTheme(bool switchVal) async {
+    isDarkTheme = switchVal;
+    appSPInstance.setBool(App.THEME_KEY, isDarkTheme);
+
+    AppState appState = context.findAncestorStateOfType<AppState>();
+    appState.setState(() {});
   }
 }

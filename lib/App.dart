@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'EntriesScreen.dart';
+import 'services/SharedPreferencesInstance.dart';
 import 'WelcomeScreen.dart';
 
 class App extends StatefulWidget {
@@ -9,31 +9,31 @@ class App extends StatefulWidget {
     EntriesScreen.routeName: (context) => EntriesScreen(),
     WelcomeScreen.routeName: (context) => WelcomeScreen(),
   };
-  final SharedPreferences preferences;
 
-  App({Key key, @required this.preferences}) : super(key: key);
-
-  bool get isDarkMode => preferences.getBool(THEME_KEY) ?? false;
+  bool get isDarkMode => appSPInstance.getBool(THEME_KEY) ?? false;
 
   @override
-  _AppState createState() => _AppState();
+  AppState createState() => AppState();
 }
 
-class _AppState extends State<App> {
-  ThemeData appTheme;
+class AppState extends State<App> {
+  bool isDarkTheme;
 
   void initState() {
     super.initState();
-    widget.preferences.getBool(App.THEME_KEY)
-        ? appTheme = ThemeData.dark()
-        : appTheme = ThemeData.light();
+    if (appSPInstance.containsKey(App.THEME_KEY)) {
+      isDarkTheme = appSPInstance.getBool(App.THEME_KEY);
+    } else {
+      isDarkTheme = false;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    isDarkTheme = appSPInstance.getBool(App.THEME_KEY);
     return MaterialApp(
         title: 'Journal',
-        theme: appTheme,
+        theme: isDarkTheme ? ThemeData.dark() : ThemeData.light(),
         routes: App.routes,
         home: WelcomeScreen());
   }
