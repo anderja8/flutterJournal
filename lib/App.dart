@@ -23,10 +23,8 @@ class AppState extends State<App> {
 
   void initState() {
     super.initState();
-    if (appSPInstance.containsKey(App.THEME_KEY)) {
-      isDarkTheme = appSPInstance.getBool(App.THEME_KEY);
-    } else {
-      isDarkTheme = false;
+    if (!appSPInstance.containsKey(App.THEME_KEY)) {
+      appSPInstance.setBool(App.THEME_KEY, false);
     }
   }
 
