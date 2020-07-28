@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'EntriesScreen.dart';
-import 'FormScreen.dart';
+import 'screens/DetailsScreen.dart';
+import 'screens/EntriesScreen.dart';
+import 'screens/FormScreen.dart';
+import 'screens/WelcomeScreen.dart';
 import 'services/SharedPreferencesInstance.dart';
-import 'WelcomeScreen.dart';
 
 class App extends StatefulWidget {
   static const THEME_KEY = 'isDarkTheme';
@@ -10,6 +11,7 @@ class App extends StatefulWidget {
     EntriesScreen.routeName: (context) => EntriesScreen(),
     WelcomeScreen.routeName: (context) => WelcomeScreen(),
     FormScreen.routeName: (context) => FormScreen(),
+    DetailsScreen.routeName: (context) => DetailsScreen(),
   };
 
   bool get isDarkMode => appSPInstance.getBool(THEME_KEY) ?? false;
@@ -35,6 +37,7 @@ class AppState extends State<App> {
         title: 'Journal',
         theme: isDarkTheme ? ThemeData.dark() : ThemeData.light(),
         routes: App.routes,
-        home: WelcomeScreen());
+        home:
+            EntriesScreen()); //WelcomeScreen()); //TODO: Dynamically decide whether to run the welcome screen or not
   }
 }

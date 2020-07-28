@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'FormScreen.dart';
+import 'screens/FormScreen.dart';
 
 class JournalFormFAB extends StatelessWidget {
   @override

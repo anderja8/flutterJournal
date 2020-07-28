@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'JournalFormFAB.dart';
-import 'ThemeSelectorDrawer.dart';
+import '../JournalFormFAB.dart';
+import '../ThemeSelectorDrawer.dart';
 
 class WelcomeScreen extends StatelessWidget {
   static String routeName = 'welcome';
