@@ -19,7 +19,7 @@ class _ThemeSelectorDrawerState extends State<ThemeSelectorDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
         child: ListView(children: [
-      DrawerHeader(child: Text('Settings')),
+      Container(child: DrawerHeader(child: Text('Settings')), height: 60.0),
       SwitchListTile(
         title: Text('Dark Theme'),
         value: isDarkTheme,
