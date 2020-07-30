@@ -24,9 +24,11 @@ class _EntriesScreenState extends State<EntriesScreen> {
         centerTitle: true,
       ),
       endDrawer: ThemeSelectorDrawer(),
-      body: ListView.builder(
-          itemCount: tempFakeEntries.length,
-          itemBuilder: (context, idx) => JournalListTile(tempFakeEntries[idx])),
+      body: Container(child: LayoutBuilder(builder: (context, constraints) {
+        return constraints.maxWidth >= 800
+            ? JournalListWithDetails(tempFakeEntries)
+            : JournalList(entries: tempFakeEntries, isHorizontal: false);
+      })),
       floatingActionButton: JournalFormFAB(),
     );
   }
@@ -42,20 +44,76 @@ class _EntriesScreenState extends State<EntriesScreen> {
   }
 }
 
+class JournalList extends StatelessWidget {
+  final List<JournalEntry> entries;
+  final bool isHorizontal;
+  final _JournalListWithDetailsState screenState;
+
+  JournalList(
+      {@required this.entries, @required this.isHorizontal, this.screenState});
+
+  @override
+  build(BuildContext context) {
+    return ListView.builder(
+        itemCount: entries.length,
+        itemBuilder: (context, idx) => isHorizontal
+            ? JournalListTile(
+                entry: entries[idx],
+                isHorizontal: isHorizontal,
+                screenState: screenState)
+            : JournalListTile(entry: entries[idx], isHorizontal: isHorizontal));
+  }
+}
+
+class JournalListWithDetails extends StatefulWidget {
+  final List<JournalEntry> entries;
+  JournalEntry selectedEntry;
+
+  JournalListWithDetails(this.entries);
+
+  @override
+  _JournalListWithDetailsState createState() => _JournalListWithDetailsState();
+}
+
+class _JournalListWithDetailsState extends State<JournalListWithDetails> {
+  @override
+  build(BuildContext context) {
+    widget.selectedEntry ??= widget.entries[0];
+
+    return Row(children: [
+      JournalList(
+          entries: widget.entries, isHorizontal: true, screenState: this),
+      detailsBody(context, widget.selectedEntry)
+    ]);
+  }
+
+  void refreshState(JournalEntry newSelection) {
+    widget.selectedEntry = newSelection;
+    setState(() {});
+  }
+}
+
 class JournalListTile extends StatelessWidget {
   final JournalEntry entry;
+  final bool isHorizontal;
   final DateFormat formatter = DateFormat('EEEE, MMMM dd, yyyy');
+  final _JournalListWithDetailsState screenState;
 
-  JournalListTile(this.entry);
+  JournalListTile(
+      {@required this.entry, @required this.isHorizontal, this.screenState});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(entry.getTitle),
       subtitle: (Text(formatter.format(entry.getDate))),
-      onTap: () {
-        pushDetailsScreen(context);
-      },
+      onTap: isHorizontal
+          ? () {
+              screenState.refreshState(entry);
+            }
+          : () {
+              pushDetailsScreen(context);
+            },
     );
   }
 
