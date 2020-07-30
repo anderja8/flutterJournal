@@ -26,14 +26,14 @@ class DetailsScreen extends StatelessWidget {
 // horizontal mode.
 Widget detailsBody(BuildContext context, JournalEntry entry) {
   return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-    paddedText(
+    paddedWidget(8.0,
         Text(entry.getTitle, style: Theme.of(context).textTheme.headline4)),
-    paddedText(Text(entry.getBody)),
-    paddedText(Text('Rating: ${entry.getRating}')),
-    paddedText(Text('ID: ${entry.getId}')),
+    paddedWidget(8.0, Text(entry.getBody)),
+    paddedWidget(8.0, Text('Rating: ${entry.getRating}')),
+    paddedWidget(8.0, Text('ID: ${entry.getId}')),
   ]);
 }
 
-Widget paddedText(Text txtWidget) {
-  return Padding(padding: EdgeInsets.all(8.0), child: txtWidget);
+Widget paddedWidget(double padVal, Widget wid) {
+  return Padding(padding: EdgeInsets.all(8.0), child: wid);
 }
