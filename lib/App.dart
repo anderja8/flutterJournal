@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'screens/DetailsScreen.dart';
 import 'screens/EntriesScreen.dart';
 import 'screens/FormScreen.dart';
 import 'screens/WelcomeScreen.dart';
@@ -11,7 +10,6 @@ class App extends StatefulWidget {
     EntriesScreen.routeName: (context) => EntriesScreen(),
     WelcomeScreen.routeName: (context) => WelcomeScreen(),
     FormScreen.routeName: (context) => FormScreen(),
-    DetailsScreen.routeName: (context) => DetailsScreen(),
   };
 
   bool get isDarkMode => appSPInstance.getBool(THEME_KEY) ?? false;

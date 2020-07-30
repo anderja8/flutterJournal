@@ -26,12 +26,7 @@ class _EntriesScreenState extends State<EntriesScreen> {
       endDrawer: ThemeSelectorDrawer(),
       body: ListView.builder(
           itemCount: tempFakeEntries.length,
-          itemBuilder: (context, idx) => JournalListTile(
-              tempFakeEntries[idx].getId,
-              tempFakeEntries[idx].getRating,
-              tempFakeEntries[idx].getTitle,
-              tempFakeEntries[idx].getBody,
-              tempFakeEntries[idx].getDate)),
+          itemBuilder: (context, idx) => JournalListTile(tempFakeEntries[idx])),
       floatingActionButton: JournalFormFAB(),
     );
   }
@@ -48,18 +43,16 @@ class _EntriesScreenState extends State<EntriesScreen> {
 }
 
 class JournalListTile extends StatelessWidget {
-  final int id, rating;
-  final String title, body;
-  final DateTime date;
+  final JournalEntry entry;
   final DateFormat formatter = DateFormat('EEEE, MMMM dd, yyyy');
 
-  JournalListTile(this.id, this.rating, this.title, this.body, this.date);
+  JournalListTile(this.entry);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(title),
-      subtitle: (Text(formatter.format(date))),
+      title: Text(entry.getTitle),
+      subtitle: (Text(formatter.format(entry.getDate))),
       onTap: () {
         pushDetailsScreen(context);
       },
@@ -68,6 +61,6 @@ class JournalListTile extends StatelessWidget {
 
   void pushDetailsScreen(BuildContext context) {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => DetailsScreen()));
+        .push(MaterialPageRoute(builder: (context) => DetailsScreen(entry)));
   }
 }
