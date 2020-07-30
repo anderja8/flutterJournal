@@ -24,11 +24,11 @@ class _EntriesScreenState extends State<EntriesScreen> {
         centerTitle: true,
       ),
       endDrawer: ThemeSelectorDrawer(),
-      body: Container(child: LayoutBuilder(builder: (context, constraints) {
-        return constraints.maxWidth >= 800
+      body: LayoutBuilder(builder: (context, constraints) {
+        return constraints.maxWidth >= 600
             ? JournalListWithDetails(tempFakeEntries)
             : JournalList(entries: tempFakeEntries, isHorizontal: false);
-      })),
+      }),
       floatingActionButton: JournalFormFAB(),
     );
   }
@@ -67,7 +67,6 @@ class JournalList extends StatelessWidget {
 
 class JournalListWithDetails extends StatefulWidget {
   final List<JournalEntry> entries;
-  JournalEntry selectedEntry;
 
   JournalListWithDetails(this.entries);
 
@@ -76,19 +75,22 @@ class JournalListWithDetails extends StatefulWidget {
 }
 
 class _JournalListWithDetailsState extends State<JournalListWithDetails> {
+  JournalEntry selectedEntry;
+
   @override
   build(BuildContext context) {
-    widget.selectedEntry ??= widget.entries[0];
+    selectedEntry ??= widget.entries[0];
 
     return Row(children: [
-      JournalList(
-          entries: widget.entries, isHorizontal: true, screenState: this),
-      detailsBody(context, widget.selectedEntry)
+      Expanded(
+          child: JournalList(
+              entries: widget.entries, isHorizontal: true, screenState: this)),
+      Expanded(child: detailsBody(context, selectedEntry))
     ]);
   }
 
   void refreshState(JournalEntry newSelection) {
-    widget.selectedEntry = newSelection;
+    selectedEntry = newSelection;
     setState(() {});
   }
 }
