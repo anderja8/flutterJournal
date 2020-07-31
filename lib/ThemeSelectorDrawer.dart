@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'App.dart';
-import 'services/SharedPreferencesInstance.dart';
+import 'services/SharedPreferencesManager.dart';
 
 class ThemeSelectorDrawer extends StatefulWidget {
   @override
@@ -29,16 +29,22 @@ class _ThemeSelectorDrawerState extends State<ThemeSelectorDrawer> {
   }
 
   bool getIsDarkTheme() {
-    if (appSPInstance.containsKey(App.THEME_KEY)) {
-      return appSPInstance.getBool(App.THEME_KEY);
+    final SharedPreferencesManager appSPInstance =
+        SharedPreferencesManager.getInstance();
+
+    if (appSPInstance.preferences.containsKey(App.THEME_KEY)) {
+      return appSPInstance.preferences.getBool(App.THEME_KEY);
     } else {
       return false;
     }
   }
 
   void setIsDarkTheme(bool switchVal) async {
+    final SharedPreferencesManager appSPInstance =
+        SharedPreferencesManager.getInstance();
+
     isDarkTheme = switchVal;
-    appSPInstance.setBool(App.THEME_KEY, isDarkTheme);
+    appSPInstance.preferences.setBool(App.THEME_KEY, isDarkTheme);
 
     AppState appState = context.findAncestorStateOfType<AppState>();
     appState.setState(() {});

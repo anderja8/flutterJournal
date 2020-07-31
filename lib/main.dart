@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'App.dart';
-import 'services/SharedPreferencesInstance.dart';
+import 'services/SharedPreferencesManager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,8 +11,7 @@ void main() async {
     DeviceOrientation.portraitUp,
   ]);
 
-  appSPInstance =
-      SharedPreferencesInstance(await SharedPreferences.getInstance());
+  await SharedPreferencesManager.initialize();
 
   runApp(App());
 }
