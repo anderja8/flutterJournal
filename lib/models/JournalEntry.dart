@@ -3,7 +3,7 @@ class JournalEntry {
   String title, body;
   DateTime date;
 
-  JournalEntry(this.id, this.title, this.body, this.rating, this.date);
+  JournalEntry({this.id, this.title, this.body, this.rating, this.date});
 
   int get getId => id;
   int get getRating => rating;

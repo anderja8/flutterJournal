@@ -37,8 +37,12 @@ class _EntriesScreenState extends State<EntriesScreen> {
   List<JournalEntry> initFakeEntries() {
     List<JournalEntry> myEntries = [];
     for (int i = 1; i <= 4; i++) {
-      myEntries.add(JournalEntry(i, 'Title ' + i.toString(),
-          'Body ' + i.toString(), i, DateTime.now()));
+      myEntries.add(JournalEntry(
+          id: i,
+          title: 'Title ' + i.toString(),
+          body: 'Body ' + i.toString(),
+          rating: i,
+          date: DateTime.now()));
     }
     return myEntries;
   }
