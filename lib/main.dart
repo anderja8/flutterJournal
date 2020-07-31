@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'App.dart';
+import 'services/DatabaseManager.dart';
 import 'services/SharedPreferencesManager.dart';
 
 void main() async {
@@ -12,6 +13,7 @@ void main() async {
   ]);
 
   await SharedPreferencesManager.initialize();
+  await DatabaseManager.initialize();
 
   runApp(App());
 }

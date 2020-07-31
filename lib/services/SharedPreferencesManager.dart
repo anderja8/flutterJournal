@@ -1,5 +1,3 @@
-//This class will handle all calls to shared preferences. Inspired by this
-//Medium article: https://medium.com/flutter-community/shared-preferences-service-in-flutter-for-code-maintainability-1dbd015b5bbd
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesManager {

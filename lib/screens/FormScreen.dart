@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:journal/models/JournalEntry.dart';
+import '../App.dart';
 import 'DetailsScreen.dart';
+import '../services/DatabaseManager.dart';
 import '../ThemeSelectorDrawer.dart';
 
 class FormScreen extends StatelessWidget {
@@ -32,15 +34,17 @@ class _EntryFormState extends State<EntryForm> {
     Navigator.of(context).pop();
   }
 
-  void saveFunc() {
+  void saveFunc() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       entry.date = DateTime.now();
-      print('Save to the DB at this point.\n');
-      print('Title: ${entry.getTitle}\n');
-      print('Body: ${entry.getBody}\n');
-      print('Rating: ${entry.getRating}\n');
-      print('Date: ${entry.getDate}\n');
+
+      DatabaseManager dbManager = DatabaseManager.getInstance();
+      await dbManager.saveJournalEntry(entry);
+
+      AppState appState = context.findAncestorStateOfType<AppState>();
+      appState.setState(() {});
+
       Navigator.of(context).pop();
     }
   }

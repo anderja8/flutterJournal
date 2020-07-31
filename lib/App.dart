@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:journal/services/DatabaseManager.dart';
+import 'models/JournalEntry.dart';
 import 'screens/EntriesScreen.dart';
 import 'screens/FormScreen.dart';
 import 'screens/WelcomeScreen.dart';
@@ -22,8 +24,10 @@ class App extends StatefulWidget {
 
 class AppState extends State<App> {
   bool isDarkTheme;
+  bool entriesExist;
   final SharedPreferencesManager appSPInstance =
       SharedPreferencesManager.getInstance();
+  final DatabaseManager dbManager = DatabaseManager.getInstance();
 
   void initState() {
     super.initState();
@@ -32,14 +36,31 @@ class AppState extends State<App> {
     }
   }
 
+  Future<bool> setEntriesExist() async {
+    List<JournalEntry> entries = await dbManager.getJournalEntries();
+    return entries.length > 0;
+  }
+
   @override
   Widget build(BuildContext context) {
     isDarkTheme = appSPInstance.preferences.getBool(App.THEME_KEY);
+    return FutureBuilder(
+        initialData: false,
+        future: setEntriesExist(),
+        builder: (context, snapshot) {
+          return MaterialApp(
+              title: 'Journal',
+              theme: isDarkTheme ? ThemeData.dark() : ThemeData.light(),
+              routes: App.routes,
+              home: snapshot.data ? EntriesScreen() : WelcomeScreen());
+        });
+
+/*
     return MaterialApp(
         title: 'Journal',
         theme: isDarkTheme ? ThemeData.dark() : ThemeData.light(),
         routes: App.routes,
-        home:
-            EntriesScreen()); //WelcomeScreen()); //TODO: Dynamically decide whether to run the welcome screen or not
+        home: WelcomeScreen());
+    //home: entriesExist ? EntriesScreen() : WelcomeScreen());*/
   }
 }

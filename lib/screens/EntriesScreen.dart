@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../JournalFormFAB.dart';
 import '../models/JournalEntry.dart';
+import '../services/DatabaseManager.dart';
 import '../screens/DetailsScreen.dart';
 import '../ThemeSelectorDrawer.dart';
 
@@ -14,37 +15,38 @@ class EntriesScreen extends StatefulWidget {
 }
 
 class _EntriesScreenState extends State<EntriesScreen> {
+  List<JournalEntry> entries;
+
   @override
   Widget build(BuildContext context) {
-    List<JournalEntry> tempFakeEntries = initFakeEntries();
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Journal Entries'),
         centerTitle: true,
       ),
       endDrawer: ThemeSelectorDrawer(),
-      body: LayoutBuilder(builder: (context, constraints) {
-        return constraints.maxWidth >= 600
-            ? JournalListWithDetails(tempFakeEntries)
-            : JournalList(entries: tempFakeEntries, isHorizontal: false);
-      }),
+      body: FutureBuilder(
+          initialData: false,
+          future: loadJournalEntries(),
+          builder: (context, snapshot) {
+            if (snapshot.data) {
+              return LayoutBuilder(builder: (context, constraints) {
+                return constraints.maxWidth >= 600
+                    ? JournalListWithDetails(entries)
+                    : JournalList(entries: entries, isHorizontal: false);
+              });
+            } else {
+              return CircularProgressIndicator();
+            }
+          }),
       floatingActionButton: JournalFormFAB(),
     );
   }
 
-  //TODO get rid of this after db ops added
-  List<JournalEntry> initFakeEntries() {
-    List<JournalEntry> myEntries = [];
-    for (int i = 1; i <= 4; i++) {
-      myEntries.add(JournalEntry(
-          id: i,
-          title: 'Title ' + i.toString(),
-          body: 'Body ' + i.toString(),
-          rating: i,
-          date: DateTime.now()));
-    }
-    return myEntries;
+  Future<bool> loadJournalEntries() async {
+    final DatabaseManager dbManager = DatabaseManager.getInstance();
+    entries = await dbManager.getJournalEntries();
+    return true;
   }
 }
 
