@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:journal/services/DatabaseManager.dart';
-import 'models/JournalEntry.dart';
 import 'screens/EntriesScreen.dart';
 import 'screens/FormScreen.dart';
 import 'services/SharedPreferencesManager.dart';
@@ -22,7 +21,6 @@ class App extends StatefulWidget {
 
 class AppState extends State<App> {
   bool isDarkTheme;
-  bool entriesExist;
   final SharedPreferencesManager appSPInstance =
       SharedPreferencesManager.getInstance();
   final DatabaseManager dbManager = DatabaseManager.getInstance();
@@ -32,11 +30,6 @@ class AppState extends State<App> {
     if (!appSPInstance.preferences.containsKey(App.THEME_KEY)) {
       appSPInstance.preferences.setBool(App.THEME_KEY, false);
     }
-  }
-
-  Future<bool> setEntriesExist() async {
-    List<JournalEntry> entries = await dbManager.getJournalEntries();
-    return entries.length > 0;
   }
 
   @override
