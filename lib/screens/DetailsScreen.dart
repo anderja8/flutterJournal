@@ -30,7 +30,6 @@ Widget detailsBody(BuildContext context, JournalEntry entry) {
         Text(entry.getTitle, style: Theme.of(context).textTheme.headline4)),
     paddedWidget(8.0, Text(entry.getBody)),
     paddedWidget(8.0, Text('Rating: ${entry.getRating}')),
-    paddedWidget(8.0, Text('ID: ${entry.getId}')),
   ]);
 }
 
