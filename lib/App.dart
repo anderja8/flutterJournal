@@ -3,14 +3,12 @@ import 'package:journal/services/DatabaseManager.dart';
 import 'models/JournalEntry.dart';
 import 'screens/EntriesScreen.dart';
 import 'screens/FormScreen.dart';
-import 'screens/WelcomeScreen.dart';
 import 'services/SharedPreferencesManager.dart';
 
 class App extends StatefulWidget {
   static const THEME_KEY = 'isDarkTheme';
   static final routes = {
     EntriesScreen.routeName: (context) => EntriesScreen(),
-    WelcomeScreen.routeName: (context) => WelcomeScreen(),
     FormScreen.routeName: (context) => FormScreen(),
   };
   final SharedPreferencesManager appSPInstance =
@@ -44,23 +42,10 @@ class AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     isDarkTheme = appSPInstance.preferences.getBool(App.THEME_KEY);
-    return FutureBuilder(
-        initialData: false,
-        future: setEntriesExist(),
-        builder: (context, snapshot) {
-          return MaterialApp(
-              title: 'Journal',
-              theme: isDarkTheme ? ThemeData.dark() : ThemeData.light(),
-              routes: App.routes,
-              home: snapshot.data ? EntriesScreen() : WelcomeScreen());
-        });
-
-/*
     return MaterialApp(
         title: 'Journal',
         theme: isDarkTheme ? ThemeData.dark() : ThemeData.light(),
         routes: App.routes,
-        home: WelcomeScreen());
-    //home: entriesExist ? EntriesScreen() : WelcomeScreen());*/
+        home: EntriesScreen());
   }
 }

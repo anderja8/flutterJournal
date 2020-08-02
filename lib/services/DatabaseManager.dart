@@ -23,9 +23,6 @@ class DatabaseManager {
   static Future initialize() async {
     String schemaCreationCommand = await rootBundle.loadString(SCHEMA_PATH);
 
-    //TODO - remove this when I want persistence
-    await deleteDatabase('journal.db');
-
     final db = await openDatabase(DATABASE_FILENAME, version: 1,
         onCreate: (Database db, int version) async {
       await db.execute(schemaCreationCommand);
